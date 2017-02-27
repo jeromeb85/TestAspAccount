@@ -2,34 +2,56 @@
   "userSecretsId": "aspnet-TestAspAccount-49eba73e-098f-425c-b5f9-4e8b55fb02d1",
 
   "dependencies": {
-    "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.1.0",
-    "Microsoft.VisualStudio.Web.CodeGeneration.Tools": "1.1.0-preview4-final",
-    "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": "1.1.0-preview4-final"
+
+    "Microsoft.ApplicationInsights.AspNetCore": "2.0.0",
+    "Microsoft.AspNetCore.Authentication": "1.1.0",
+    "Microsoft.AspNetCore.Authentication.Cookies": "1.1.0",
+    "Microsoft.AspNetCore.Authorization": "1.1.0",
+    "Microsoft.AspNetCore.Diagnostics": "1.1.0",
+    "Microsoft.AspNetCore.Http.Features": "1.1.0",
+    "Microsoft.AspNetCore.Identity": "1.1.0",
+    "Microsoft.AspNetCore.Mvc": "1.1.1",
+    "Microsoft.AspNetCore.Routing": "1.1.0",
+    "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
+    "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
+    "Microsoft.AspNetCore.Server.Kestrel.Https": "1.1.0",
+    "Microsoft.AspNetCore.StaticFiles": "1.1.0",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0",
+    "Microsoft.Extensions.Configuration.Json": "1.1.0",
+    "Microsoft.Extensions.Logging": "1.1.0",
+    "Microsoft.Extensions.Logging.Console": "1.1.0",
+    "Microsoft.Extensions.Logging.Debug": "1.1.0",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
+    "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.1.0"
   },
 
   "tools": {
+    "BundlerMinifier.Core": "2.3.327",
+    "Microsoft.AspNetCore.Razor.Tools": "1.1.0-preview4-final",
+    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.1.0-preview4-final"
   },
 
-  "frameworks": {
-    "net461": { }
-  },
 
-  "buildOptions": {
-    "emitEntryPoint": true,
-    "preserveCompilationContext": true
-  },
+    "frameworks": {
+      "net461": {}
+    },
 
-  "publishOptions": {
-    "include": [
-      "wwwroot",
-      "**/*.cshtml",
-      "appsettings.json",
-      "web.config"
-    ]
-  },
+    "buildOptions": {
+      "emitEntryPoint": true,
+      "preserveCompilationContext": true
+    },
 
-  "scripts": {
-    "prepublish": [ "bower install", "dotnet bundle" ],
-    "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
+    "publishOptions": {
+      "include": [
+        "wwwroot",
+        "**/*.cshtml",
+        "appsettings.json",
+        "web.config"
+      ]
+    },
+
+    "scripts": {
+      "prepublish": [ "bower install", "dotnet bundle" ],
+      "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
+    }
   }
-}

@@ -11,6 +11,8 @@ using TestAspAccount.Data;
 using TestAspAccount.Models;
 using TestAspAccount.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace TestAspAccount
 {
@@ -26,7 +28,7 @@ namespace TestAspAccount
             if (env.IsDevelopment())
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                //builder.AddUserSecrets();
+                builder.AddUserSecrets();
 
                 // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
                 builder.AddApplicationInsightsSettings(developerMode: true);
@@ -44,6 +46,12 @@ namespace TestAspAccount
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
+            services.AddAuthentication();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Authenticated", policy => policy.RequireAuthenticatedUser());
+            });
+
             //services.AddDbContext<ApplicationDbContext>(options =>
             //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -54,6 +62,8 @@ namespace TestAspAccount
                 .AddDefaultTokenProviders();
             //services.AddSingleton<IUserPasswordStore<ApplicationUser>, UserPasswordStore>();
             services.AddMvc();
+
+           
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -83,15 +93,28 @@ namespace TestAspAccount
 
             app.UseStaticFiles();
 
+
             app.UseIdentity();
 
+
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme,
+
+                LoginPath = new PathString("/Account/Login/"),
+                AccessDeniedPath = new PathString("/Account/Forbidden/"),
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                CookieHttpOnly = true
+
+            });
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Account}/{action=Login}/{id?}");
             });
         }
     }

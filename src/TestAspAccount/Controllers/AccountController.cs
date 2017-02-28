@@ -23,6 +23,24 @@ namespace TestAspAccount.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
 
+        protected UserManager<ApplicationUser> UserManager
+        {
+            get
+            {
+                return _userManager;
+            }
+        }
+
+
+        protected SignInManager<ApplicationUser> SigninManager
+        {
+            get
+            {
+
+                return _signInManager;
+            }
+        }
+
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -44,7 +62,33 @@ namespace TestAspAccount.Controllers
         public IActionResult Login(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            return View();
+            ViewBag.ReturnUrl = returnUrl;
+
+            ApplicationUser user = null;
+
+
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                user = UserManager.FindByNameAsync(User.Identity.Name).Result;
+            }
+            else
+            {
+                return View();
+            }
+
+            if (user != null && SigninManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                SigninManager.SignInAsync(user, false);
+                return RedirectToAction("Index", "Home");
+            }
+
+              
+
+
         }
 
         //

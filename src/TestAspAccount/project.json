@@ -2,7 +2,6 @@
   "userSecretsId": "aspnet-TestAspAccount-49eba73e-098f-425c-b5f9-4e8b55fb02d1",
 
   "dependencies": {
-
     "Microsoft.ApplicationInsights.AspNetCore": "2.0.0",
     "Microsoft.AspNetCore.Authentication": "1.1.0",
     "Microsoft.AspNetCore.Authentication.Cookies": "1.1.0",
@@ -18,6 +17,7 @@
     "Microsoft.AspNetCore.StaticFiles": "1.1.0",
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0",
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
+    "Microsoft.Extensions.Configuration.UserSecrets": "1.1.0",
     "Microsoft.Extensions.Logging": "1.1.0",
     "Microsoft.Extensions.Logging.Console": "1.1.0",
     "Microsoft.Extensions.Logging.Debug": "1.1.0",

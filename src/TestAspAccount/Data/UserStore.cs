@@ -8,17 +8,17 @@ using System.Threading;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.Internal;
 
 namespace TestAspAccount.Data
 {
-    public partial class UserStore : 
-        IUserStore<ApplicationUser>, 
-        IUserPasswordStore<ApplicationUser>, 
-        IUserSecurityStampStore<ApplicationUser>,
-        IUserClaimStore<ApplicationUser>
+    public partial class UserStore :
+        IUserStore<ApplicationUser>,
+        IUserPasswordStore<ApplicationUser>,
+        IUserSecurityStampStore<ApplicationUser>
     {
         private IServiceProvider _serviceProvider;
-        
+
         public IServiceProvider ServiceProvider
         {
             get { return _serviceProvider; }
@@ -27,7 +27,7 @@ namespace TestAspAccount.Data
 
         public UserStore(IServiceProvider serviceProvider)
         {
-        _serviceProvider = serviceProvider;
+            _serviceProvider = serviceProvider;
         }
 
         public Task<IdentityResult> CreateAsync(ApplicationUser user, CancellationToken cancellationToken)
@@ -54,14 +54,18 @@ namespace TestAspAccount.Data
 
         public Task<ApplicationUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            IPasswordHasher<ApplicationUser> hasher = ServiceProvider.GetRequiredService<IPasswordHasher<ApplicationUser>>() as PasswordHasher<ApplicationUser>;
+            IPasswordHasher<ApplicationUser> hasher = ServiceProvider.GetRequiredService<IPasswordHasher<ApplicationUser>>();
+            
             ApplicationUser user = new ApplicationUser()
             {
                 Id = "JOE@TOTO.COM",
                 UserName = "JOE@TOTO.COM",
                 Email = "JOE@TOTO.COM"
             };
-            user.PasswordHash = hasher.HashPassword(user, "TOto85640");
+
+            SetPasswordHashAsync(user,hasher.HashPassword(user, "TOto85640"), cancellationToken);
+            SetSecurityStampAsync(user, Guid.NewGuid().ToString(), cancellationToken);
+            
             return Task.FromResult(user);
 
         }
@@ -103,12 +107,27 @@ namespace TestAspAccount.Data
 
         public Task SetPasswordHashAsync(ApplicationUser user, string passwordHash, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+            // ThrowIfDisposed();
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+            user.PasswordHash = passwordHash;
+            return TaskCache.CompletedTask;
+
         }
 
         public Task SetSecurityStampAsync(ApplicationUser user, string stamp, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+            // ThrowIfDisposed();
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+            user.SecurityStamp = stamp;
+            return TaskCache.CompletedTask;
         }
 
         public Task SetUserNameAsync(ApplicationUser user, string userName, CancellationToken cancellationToken)
@@ -132,29 +151,6 @@ namespace TestAspAccount.Data
             return Convert.ToBase64String(hashBytes);
         }
 
-        public Task<IList<Claim>> GetClaimsAsync(ApplicationUser user, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task AddClaimsAsync(ApplicationUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task ReplaceClaimAsync(ApplicationUser user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task RemoveClaimsAsync(ApplicationUser user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IList<ApplicationUser>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }

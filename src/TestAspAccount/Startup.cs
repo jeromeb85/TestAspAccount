@@ -50,7 +50,6 @@ namespace TestAspAccount
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddRoleStore<RoleStore>()
                 .AddUserStore<UserStore>()
-
                 //  .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
             //services.AddSingleton<IUserPasswordStore<ApplicationUser>, UserPasswordStore>();

@@ -114,7 +114,7 @@ namespace TestAspAccount
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Account}/{action=Login}/{id?}");
+                    template: "{controller=Account}/{action=AutoLogin}/{id?}");
             });
         }
     }

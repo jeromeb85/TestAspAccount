@@ -61,34 +61,31 @@ namespace TestAspAccount.Controllers
         [AllowAnonymous]
         public IActionResult Login(string returnUrl = null)
         {
-            ViewData["ReturnUrl"] = returnUrl;
-            ViewBag.ReturnUrl = returnUrl;
 
+            return View();          
+
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AutoLogin()
+        {
             ApplicationUser user = null;
-
 
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
                 user = UserManager.FindByNameAsync(User.Identity.Name).Result;
             }
-            else
-            {
-                return View();
-            }
 
-            if (user != null && SigninManager.IsSignedIn(User))
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            else
+            if (user != null)
             {
                 SigninManager.SignInAsync(user, false);
                 return RedirectToAction("Index", "Home");
             }
-
-              
-
-
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
         }
 
         //
